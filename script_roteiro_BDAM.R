@@ -206,13 +206,33 @@ View(dados_bd4)
 str(codigos_ibge)
 summary(codigos_ibge)
 View(codigos_ibge)
-
 # Ao terminar a Tarefa 1 commit com a mensagem " script - tarefa 1" e envie para o repositório Treino_Extensao
 
 
 # Tarefa 2: Manipulação dos dados
 # Criar uma nova variável em dados_bd4 MUNICIPIOS atribuindo os códigos dos municípios, de forma a ficar
 # coerente com os nomes dos municipios e códigos IBGE
+codigos_ibge$CODMUNRES = as.character(codigos_ibge$CODMUNRES)
+
+nomes_municipios = sub(" \\(RJ\\)$", "", dados_bd4$MUNICIPIO)
+
+dados_bd4$MUNICIPIOS = ifelse(
+  dados_bd4$MUNICIPIO == "Rio de Janeiro",
+  "33",
+  sapply(nomes_municipios, function(nome) {
+    
+    codigos = codigos_ibge$CODMUNRES[
+      codigos_ibge$município == nome &
+        substr(codigos_ibge$CODMUNRES, 1, 2) == "33"
+    ]
+    
+    if (length(codigos) == 1) {
+      codigos
+    } else {
+      NA
+    }
+  })
+)
 
 # Ao terminar a Tarefa 2 commit com a mensagem " script - tarefa 1 a 2" e envie para o repositório Treino_Extensao
 

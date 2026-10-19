@@ -292,12 +292,22 @@ summary(dados_bd5)
 
 # Ao terminar a Tarefa 1 commit com a mensagem " script - tarefa 1" e envie para o repositório Treino_Extensao
 
-
 # Tarefa 2: Manipulação dos dados
 # Observe que os números estão com ponto indicando milhar. Estes pontos devem ser extraídos para não confundir com decimal
 
-# Ao terminar a Tarefa 2 commit com a mensagem " script - tarefa 1 a 2" e envie para o repositório Treino_Extensao
+dados_bd5$NUM_CARROS_REGISTRADOS = as.numeric(
+  gsub("\\.","",dados_bd5$NUM_CARROS_REGISTRADOS)
+)
 
+dados_bd5$NUM_MOTOS_REGISTRADAS <- as.numeric(
+  gsub("\\.", "", dados_bd5$NUM_MOTOS_REGISTRADAS)
+)
+
+# Conferir a estrutura
+str(dados_bd5)
+head(dados_bd5)
+
+# Ao terminar a Tarefa 2 commit com a mensagem " script - tarefa 1 a 2" e envie para o repositório Treino_Extensao
 
 # Tarefa 3: Criar o banco de dados BANCO5_RJ, POR MUNICÍPIO, com as seguintes variáveis listadas abaixo. 
 # Atenção: a 1a linha do banco deve ser da UF 33

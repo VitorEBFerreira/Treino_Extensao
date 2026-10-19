@@ -317,6 +317,31 @@ head(dados_bd5)
 # NCR: número de carros registrados
 # NMR: número de motos registradas
 
+BANCO5_RJ = data.frame(
+  ANO = 2025,
+  NIVEL = "MUNICIPIO",
+  CODIGO = as.numeric(dados_bd5$MUNICIPIO),
+  NCR = dados_bd5$NUM_CARROS_REGISTRADOS,
+  NMR = dados_bd5$NUM_MOTOS_REGISTRADAS
+)
+
+# Criar a linha da UF 33 com a soma dos registros disponíveis
+linha_UF = data.frame(
+  ANO = 2025,
+  NIVEL = "UF",
+  CODIGO = 33,
+  NCR = sum(BANCO5_RJ$NCR, na.rm = TRUE),
+  NMR = sum(BANCO5_RJ$NMR, na.rm = TRUE)
+)
+
+# Colocar a UF na primeira linha
+BANCO5_RJ = rbind(linha_UF, BANCO5_RJ)
+
+# Conferir o banco final
+str(BANCO5_RJ)
+head(BANCO5_RJ)
+View(BANCO5_RJ)
+
 # Ao terminar a Tarefa 3 commit com a mensagem " script - tarefa 1 a 3" e envie para o repositório Treino_Extensao
 
 

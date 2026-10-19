@@ -484,6 +484,13 @@ colSums(!is.na(BDAM_RJ[, 4:39]))
 
 # Tarefa 2: Exportar o banco de dados BDAM_RJ com o nome BDAM_RJ.csv
 
+write.csv2(
+  BDAM_RJ,
+  "BDAM_RJ.csv",
+  row.names = FALSE,
+  na = "NA"
+)
+
 # Ao terminar a Tarefa 2 commit com a mensagem "dados e script - Etapa 6" e envie para o repositório Treino_Extensao
 
 

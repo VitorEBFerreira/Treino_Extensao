@@ -344,12 +344,14 @@ View(BANCO5_RJ)
 
 # Ao terminar a Tarefa 3 commit com a mensagem " script - tarefa 1 a 3" e envie para o repositório Treino_Extensao
 
-
 # Tarefa 4: Exportar o banco de dados BANCO5_RJ com o nome BANCO5_RJ.csv
 
+write.csv2(BANCO5_RJ,
+           "BANCO5_RJ.csv",
+           row.names = FALSE,
+           na = "")
+
 # Ao terminar a Tarefa 4 commit com a mensagem "dados e script - Etapa 5" e envie para o repositório Treino_Extensao
-
-
 
 ##### Merge para a branch main ######
 ##### Após terminar todas as 5 etapas acima você deve ir para a branch main e fazer merge de cada branch para o Git ajustar tudo

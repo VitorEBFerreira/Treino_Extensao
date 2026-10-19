@@ -404,8 +404,83 @@ write.csv2(BANCO5_RJ,
 # NCR: número de carros registrados
 # NMR: número de motos registradas
 
-# Ao terminar a Tarefa 1 commit com a mensagem " script - tarefa 1" e envie para o repositório Treino_Extensao
+# Ler os bancos tratados (Não tinha feito os bancos 1 e 2)
+BANCO3_RJ = read.csv2("BANCO3_RJ.csv", stringsAsFactors = FALSE)
+BANCO4_RJ = read.csv2("BANCO4_RJ.csv", stringsAsFactors = FALSE)
+BANCO5_RJ = read.csv2("BANCO5_RJ.csv", stringsAsFactors = FALSE)
 
+# Padronizar
+padronizar_chaves = function(banco) {
+  banco$ANO = as.character(banco$ANO)
+  banco$NIVEL = trimws(as.character(banco$NIVEL))
+  banco$CODIGO = trimws(as.character(banco$CODIGO))
+  banco$CODIGO = sub("\\.0+$", "", banco$CODIGO)
+  banco
+}
+
+BANCO3_RJ = padronizar_chaves(BANCO3_RJ)
+BANCO4_RJ = padronizar_chaves(BANCO4_RJ)
+BANCO5_RJ = padronizar_chaves(BANCO5_RJ)
+
+# O BANCO4 usa o codigo IBGE de 7 digitos.
+# Remover o ultimo digito para igualar ao padrao dos outros bancos.
+municipios = BANCO4_RJ$NIVEL == "MUNICIPIO"
+BANCO4_RJ$CODIGO[municipios] = substr(
+  BANCO4_RJ$CODIGO[municipios], 1, 6
+)
+
+stopifnot(!anyDuplicated(BANCO3_RJ[c("ANO", "NIVEL", "CODIGO")]))
+stopifnot(!anyDuplicated(BANCO4_RJ[c("ANO", "NIVEL", "CODIGO")]))
+stopifnot(!anyDuplicated(BANCO5_RJ[c("ANO", "NIVEL", "CODIGO")]))
+
+BDAM_RJ = Reduce(
+  function(x, y) merge(
+    x, y,
+    by = c("ANO", "NIVEL", "CODIGO"),
+    all = TRUE
+  ),
+  list(BANCO3_RJ, BANCO4_RJ, BANCO5_RJ)
+)
+
+variaveis = c(
+  "ANO", "NIVEL", "CODIGO",
+  "POPH", "POPHF", "POPHM",
+  "QR_CA", "QRU", "QRR",
+  "TVV", "TCV", "TMV", "TVVF", "TVVM",
+  "TVC_22_34", "TVC_35_45", "VMV", "DPV",
+  "V_P25", "V_P50", "V_P75",
+  "TV", "TC", "TM", "TVCF", "TVCM",
+  "TC_22_34", "TC_35_45", "NMF", "DPF",
+  "F_P25", "F_P50", "F_P75",
+  "TAFA", "TADS", "TADA", "TACO",
+  "NCR", "NMR"
+)
+
+# Criar colunas ausentes como NA
+colunas_ausentes = setdiff(variaveis, names(BDAM_RJ))
+
+for (coluna in colunas_ausentes) {
+  BDAM_RJ[[coluna]] = NA
+}
+
+# Organizar as colunas
+BDAM_RJ = BDAM_RJ[, variaveis]
+
+# UF primeiro, depois municipios
+BDAM_RJ = BDAM_RJ[
+  order(BDAM_RJ$NIVEL != "UF", BDAM_RJ$CODIGO),
+]
+
+rownames(BDAM_RJ) = NULL
+
+# Conferindo
+print(dim(BDAM_RJ))
+print(names(BDAM_RJ))
+print(head(BDAM_RJ))
+table(BDAM_RJ$NIVEL)
+colSums(!is.na(BDAM_RJ[, 4:39]))
+
+# Ao terminar a Tarefa 1 commit com a mensagem " script - tarefa 1" e envie para o repositório Treino_Extensao
 
 # Tarefa 2: Exportar o banco de dados BDAM_RJ com o nome BDAM_RJ.csv
 
